@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Voitures pour enfants</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f8fbff;color:#0f172a}
+body{min-height:100vh}
+.hidden{display:none !important}
+header{
+  background:linear-gradient(135deg,#2563eb,#1d4ed8);
+  color:white;padding:20px 14px 16px;text-align:center;
+}
+header h1{margin:0;font-size:30px;line-height:1.1}
+header p{margin:8px 0 0;color:#dbeafe;font-size:15px}
+.topbar{
+  position:sticky;top:0;z-index:30;background:rgba(248,251,255,.96);
+  backdrop-filter:blur(12px);border-bottom:1px solid #dbeafe;padding:10px 12px;
+}
+.topbar-inner{max-width:900px;margin:0 auto;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.big-toggle{
+  border:0;border-radius:18px;padding:14px 18px;font-size:18px;font-weight:900;
+  background:#16a34a;color:white;box-shadow:0 8px 20px rgba(22,163,74,.20)
+}
+.big-toggle.off{background:#2563eb}
+.small-btn{
+  border:0;border-radius:14px;padding:10px 14px;font-size:15px;font-weight:800;background:#e0ecff;color:#1d4ed8
+}
+.wrap{max-width:900px;margin:0 auto;padding:16px 14px 40px}
+.card{
+  background:white;border:1px solid #dbeafe;border-radius:26px;padding:18px;
+  box-shadow:0 12px 28px rgba(37,99,235,.08)
+}
+.home-grid{display:grid;grid-template-columns:1fr;gap:14px}
+.menu-btn{
+  border:0;border-radius:26px;background:white;padding:22px 18px;text-align:left;
+  box-shadow:0 12px 28px rgba(37,99,235,.10);border:2px solid #dbeafe;
+}
+.menu-btn .emoji{font-size:40px;display:block;margin-bottom:8px}
+.menu-btn .title{font-size:28px;font-weight:900;display:block}
+.menu-btn .sub{font-size:15px;color:#475569;display:block;margin-top:4px}
+
+.mascot{
+  display:flex;gap:12px;align-items:center;margin-bottom:14px
+}
+.mascot .car{
+  width:76px;height:76px;border-radius:22px;background:#fef3c7;display:flex;align-items:center;justify-content:center;
+  font-size:40px;box-shadow:inset 0 0 0 2px #fde68a
+}
+.mascot .bubble{
+  flex:1;background:#eff6ff;border-radius:22px;padding:14px 16px;font-weight:800;font-size:18px;color:#1e3a8a
+}
+
+.learn-logo{
+  height:180px;display:flex;align-items:center;justify-content:center;margin:6px 0 10px
+}
+.learn-logo img{max-width:170px;max-height:160px;object-fit:contain}
+.fallback{
+  width:140px;height:140px;border-radius:32px;background:#eef2ff;color:#1d4ed8;
+  display:flex;align-items:center;justify-content:center;font-size:44px;font-weight:900
+}
+.brand-name{text-align:center;font-size:32px;font-weight:900;margin:10px 0 18px}
+.learn-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.learn-actions .navbtn,.big-primary,.big-secondary{
+  border:0;border-radius:22px;padding:16px 14px;font-size:22px;font-weight:900
+}
+.navbtn{background:#e0ecff;color:#1d4ed8}
+.big-primary{background:#f59e0b;color:white;width:100%;margin:0 0 14px}
+.big-secondary{background:#ecfeff;color:#155e75;width:100%;margin-top:10px}
+
+.quiz-target{text-align:center;font-size:30px;font-weight:900;color:#1d4ed8;margin:8px 0 12px}
+.quiz-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.choice{
+  border:2px solid #dbeafe;border-radius:24px;background:white;padding:16px 10px;min-height:190px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 16px rgba(37,99,235,.06)
+}
+.choice:active{transform:scale(.98)}
+.choice-logo{height:92px;display:flex;align-items:center;justify-content:center}
+.choice-logo img{max-width:110px;max-height:90px;object-fit:contain}
+.choice-name{font-size:18px;font-weight:900;text-align:center}
+.feedback{
+  text-align:center;font-size:30px;font-weight:900;min-height:44px;margin:6px 0 10px
+}
+.stars{text-align:center;font-size:28px;letter-spacing:4px;margin-bottom:10px}
+.confetti{
+  position:fixed;inset:0;pointer-events:none;display:none;z-index:99
+}
+.confetti.show{display:block}
+.confetti span{
+  position:absolute;top:-20px;width:12px;height:18px;border-radius:4px;
+  animation:fall 1.6s linear forwards
+}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:0}}
+
+.gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.gallery-card{
+  border:2px solid #dbeafe;border-radius:24px;background:white;padding:14px 8px;min-height:180px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px
+}
+.gallery-logo{height:90px;display:flex;align-items:center;justify-content:center}
+.gallery-logo img{max-width:110px;max-height:90px;object-fit:contain}
+.gallery-name{font-size:17px;font-weight:900;text-align:center}
+
+.footer-note{text-align:center;color:#64748b;font-size:13px;margin-top:18px}
+@media (min-width:760px){
+  .home-grid{grid-template-columns:1fr 1fr 1fr}
+  .gallery-grid{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body>
+<div class="confetti" id="confetti"></div>
+
+<header>
+  <h1>🚗 Voitures pour Ahmed</h1>
+  <p>Une version simple, visuelle et amusante pour les enfants de 3 ans.</p>
+</header>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <button id="soundBtn" class="big-toggle off">🔊 Activer le son</button>
+    <button id="homeBtn" class="small-btn">🏠 Accueil</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <section id="homeScreen">
+    <div class="mascot">
+      <div class="car">🚙</div>
+      <div class="bubble" id="homeBubble">Bonjour ! Je m’appelle Zoom. On va apprendre les marques de voitures !</div>
+    </div>
+
+    <div class="home-grid">
+      <button class="menu-btn" id="learnBtn">
+        <span class="emoji">👀</span>
+        <span class="title">Apprendre</span>
+        <span class="sub">Une marque à la fois, très grande.</span>
+      </button>
+
+      <button class="menu-btn" id="quizBtn">
+        <span class="emoji">🎯</span>
+        <span class="title">Trouve la marque</span>
+        <span class="sub">Écoute et touche le bon logo.</span>
+      </button>
+
+      <button class="menu-btn" id="allBtn">
+        <span class="emoji">🚗</span>
+        <span class="title">Toutes les voitures</span>
+        <span class="sub">Voir toutes les marques faciles.</span>
+      </button>
+    </div>
+
+    <div class="footer-note">Conseil parent : commence par “Apprendre”, puis “Trouve la marque”.</div>
+  </section>
+
+  <section id="learnScreen" class="hidden">
+    <div class="mascot">
+      <div class="car">🚙</div>
+      <div class="bubble" id="learnBubble">Touche le logo ou le bouton pour écouter.</div>
+    </div>
+
+    <div class="card">
+      <div class="learn-logo" id="learnLogo"></div>
+      <div class="brand-name" id="learnName"></div>
+      <button class="big-primary" id="sayAgainBtn">🔊 Encore</button>
+      <div class="learn-actions">
+        <button class="navbtn" id="prevBtn">⬅️ Avant</button>
+        <button class="navbtn" id="nextBtn">Après ➡️</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="quizScreen" class="hidden">
+    <div class="mascot">
+      <div class="car">🚙</div>
+      <div class="bubble" id="quizBubble">Écoute bien, puis touche le bon logo.</div>
+    </div>
+
+    <div class="card">
+      <div class="stars" id="stars">☆☆☆</div>
+      <div class="feedback" id="feedback"></div>
+      <div class="quiz-target" id="quizTarget">Trouve…</div>
+      <button class="big-primary" id="repeatQuizBtn">🔊 Répéter</button>
+      <div class="quiz-grid" id="quizGrid"></div>
+      <button class="big-secondary" id="newQuizBtn">➡️ Nouvelle question</button>
+    </div>
+  </section>
+
+  <section id="allScreen" class="hidden">
+    <div class="mascot">
+      <div class="car">🚙</div>
+      <div class="bubble">Touche une voiture pour entendre son nom.</div>
+    </div>
+
+    <div class="gallery-grid" id="galleryGrid"></div>
+  </section>
+</div>
+
+<script>
+const brands = [{"name": "Toyota", "icon": "toyota", "domain": "toyota.com"}, {"name": "BMW", "icon": "bmw", "domain": "bmw.com"}, {"name": "Mercedes", "icon": "mercedesbenz", "domain": "mercedes-benz.com"}, {"name": "Audi", "icon": "audi", "domain": "audi.com"}, {"name": "Ford", "icon": "ford", "domain": "ford.com"}, {"name": "Tesla", "icon": "tesla", "domain": "tesla.com"}, {"name": "Ferrari", "icon": "ferrari", "domain": "ferrari.com"}, {"name": "Lamborghini", "icon": "lamborghini", "domain": "lamborghini.com"}, {"name": "Porsche", "icon": "porsche", "domain": "porsche.com"}, {"name": "Honda", "icon": "honda", "domain": "honda.com"}, {"name": "Nissan", "icon": "nissan", "domain": "nissan-global.com"}, {"name": "Jeep", "icon": "jeep", "domain": "jeep.com"}];
+let soundOn = false;
+let voice = null;
+let learnIndex = 0;
+let currentQuizAnswer = null;
+let stars = 0;
+
+const soundBtn = document.getElementById('soundBtn');
+const homeBtn = document.getElementById('homeBtn');
+const homeScreen = document.getElementById('homeScreen');
+const learnScreen = document.getElementById('learnScreen');
+const quizScreen = document.getElementById('quizScreen');
+const allScreen = document.getElementById('allScreen');
+const confetti = document.getElementById('confetti');
+
+const pron = {
+  "BMW":"B M W",
+  "Mercedes":"Mercedes",
+  "Jeep":"Jeep",
+  "Audi":"Audi",
+  "BYD":"B Y D"
+};
+
+function loadVoices(){
+  if(!('speechSynthesis' in window)) return;
+  const vs = speechSynthesis.getVoices();
+  voice = vs.find(v => /^fr/i.test(v.lang)) || vs.find(v => /^en-US/i.test(v.lang)) || vs.find(v => /^en/i.test(v.lang)) || vs[0] || null;
+}
+loadVoices();
+if('speechSynthesis' in window) speechSynthesis.onvoiceschanged = loadVoices;
+
+function speak(text){
+  if(!soundOn || !('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  if(voice) {
+    u.voice = voice;
+    u.lang = voice.lang;
+  } else {
+    u.lang = "fr-FR";
+  }
+  u.rate = 0.84;
+  u.pitch = 1.03;
+  u.volume = 1;
+  speechSynthesis.speak(u);
+}
+
+function sayBrand(name){
+  speak(pron[name] || name);
+}
+
+function activateSound(){
+  if(!('speechSynthesis' in window)){
+    soundBtn.textContent = "❌ Ouvre dans Safari";
+    return;
+  }
+  loadVoices();
+  const u = new SpeechSynthesisUtterance("Bonjour");
+  if(voice) {
+    u.voice = voice;
+    u.lang = voice.lang;
+  } else {
+    u.lang = "fr-FR";
+  }
+  u.volume = 0.05;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(u);
+  soundOn = true;
+  soundBtn.textContent = "✅ Son activé";
+  soundBtn.classList.remove('off');
+}
+
+function initials(name){
+  return name.split(/\s+|-/).filter(Boolean).map(x => x[0]).join('').slice(0,2).toUpperCase();
+}
+
+function makeLogoElement(brand, className){
+  const box = document.createElement('div');
+  box.className = className;
+  const img = document.createElement('img');
+  img.alt = "Logo " + brand.name;
+  const sources = [];
+  if(brand.icon) {
+    sources.push("https://cdn.simpleicons.org/" + brand.icon + "/111827");
+    sources.push("https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/" + brand.icon + ".svg");
+  }
+  if(brand.domain) {
+    sources.push("https://logo.clearbit.com/" + brand.domain);
+    sources.push("https://www.google.com/s2/favicons?sz=128&domain=" + brand.domain);
+  }
+  let i = 0;
+  const fallback = () => {
+    box.innerHTML = '';
+    const fb = document.createElement('div');
+    fb.className = 'fallback';
+    fb.textContent = initials(brand.name);
+    box.appendChild(fb);
+  };
+  const next = () => {
+    if(i >= sources.length) {
+      fallback();
+      return;
+    }
+    img.src = sources[i++];
+  };
+  img.onerror = next;
+  img.onload = () => {
+    box.innerHTML = '';
+    box.appendChild(img);
+  };
+  next();
+  return box;
+}
+
+function showScreen(name){
+  homeScreen.classList.add('hidden');
+  learnScreen.classList.add('hidden');
+  quizScreen.classList.add('hidden');
+  allScreen.classList.add('hidden');
+  if(name === 'home') homeScreen.classList.remove('hidden');
+  if(name === 'learn') learnScreen.classList.remove('hidden');
+  if(name === 'quiz') quizScreen.classList.remove('hidden');
+  if(name === 'all') allScreen.classList.remove('hidden');
+}
+
+function renderLearn(){
+  const brand = brands[learnIndex];
+  const logo = document.getElementById('learnLogo');
+  logo.innerHTML = '';
+  const el = makeLogoElement(brand, 'learn-logo');
+  logo.replaceWith(el);
+  el.id = 'learnLogo';
+  el.className = 'learn-logo';
+  el.onclick = () => sayBrand(brand.name);
+  document.getElementById('learnName').textContent = brand.name;
+  document.getElementById('learnBubble').textContent = "Voici " + brand.name + " !";
+}
+
+function shuffle(arr){
+  return arr.map(v => [Math.random(), v]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
+}
+
+function renderQuiz(){
+  document.getElementById('feedback').textContent = "";
+  const answer = brands[Math.floor(Math.random()*brands.length)];
+  currentQuizAnswer = answer.name;
+  const others = shuffle(brands.filter(b => b.name !== answer.name)).slice(0,3);
+  const options = shuffle([answer, ...others]);
+  const grid = document.getElementById('quizGrid');
+  grid.innerHTML = '';
+  document.getElementById('quizTarget').textContent = "Trouve " + answer.name + " !";
+  document.getElementById('quizBubble').textContent = "Écoute : trouve " + answer.name + " !";
+  options.forEach(brand => {
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    const logo = makeLogoElement(brand, 'choice-logo');
+    const name = document.createElement('div');
+    name.className = 'choice-name';
+    name.textContent = brand.name;
+    btn.append(logo, name);
+    btn.onclick = () => checkQuiz(brand.name);
+    grid.appendChild(btn);
+  });
+  sayBrand(answer.name);
+}
+
+function updateStars(){
+  let s = "";
+  for(let i=0;i<3;i++) s += i < stars ? "★" : "☆";
+  document.getElementById('stars').textContent = s;
+}
+
+function launchConfetti(){
+  confetti.innerHTML = '';
+  const colors = ['#f59e0b','#ef4444','#10b981','#3b82f6','#8b5cf6','#ec4899'];
+  for(let i=0;i<30;i++){
+    const piece = document.createElement('span');
+    piece.style.left = Math.random()*100 + 'vw';
+    piece.style.background = colors[i % colors.length];
+    piece.style.animationDelay = (Math.random()*0.25) + 's';
+    confetti.appendChild(piece);
+  }
+  confetti.classList.add('show');
+  setTimeout(()=>confetti.classList.remove('show'),1700);
+}
+
+function checkQuiz(name){
+  const fb = document.getElementById('feedback');
+  if(name === currentQuizAnswer){
+    stars = Math.min(3, stars + 1);
+    updateStars();
+    fb.textContent = "⭐ Bravo !";
+    fb.style.color = "#16a34a";
+    speak("Bravo !");
+    launchConfetti();
+    if(stars >= 3){
+      setTimeout(()=>{
+        stars = 0;
+        updateStars();
+      }, 1800);
+    }
+  } else {
+    fb.textContent = "🙂 Essaie encore";
+    fb.style.color = "#f59e0b";
+    speak("Essaie encore");
+  }
+}
+
+function renderGallery(){
+  const grid = document.getElementById('galleryGrid');
+  grid.innerHTML = '';
+  brands.forEach(brand => {
+    const btn = document.createElement('button');
+    btn.className = 'gallery-card';
+    const logo = makeLogoElement(brand, 'gallery-logo');
+    const name = document.createElement('div');
+    name.className = 'gallery-name';
+    name.textContent = brand.name;
+    btn.append(logo, name);
+    btn.onclick = () => sayBrand(brand.name);
+    grid.appendChild(btn);
+  });
+}
+
+document.getElementById('learnBtn').onclick = () => {
+  showScreen('learn');
+  renderLearn();
+  sayBrand(brands[learnIndex].name);
+};
+document.getElementById('quizBtn').onclick = () => {
+  showScreen('quiz');
+  renderQuiz();
+};
+document.getElementById('allBtn').onclick = () => {
+  showScreen('all');
+  renderGallery();
+};
+document.getElementById('sayAgainBtn').onclick = () => sayBrand(brands[learnIndex].name);
+document.getElementById('prevBtn').onclick = () => {
+  learnIndex = (learnIndex - 1 + brands.length) % brands.length;
+  renderLearn();
+  sayBrand(brands[learnIndex].name);
+};
+document.getElementById('nextBtn').onclick = () => {
+  learnIndex = (learnIndex + 1) % brands.length;
+  renderLearn();
+  sayBrand(brands[learnIndex].name);
+};
+document.getElementById('repeatQuizBtn').onclick = () => sayBrand(currentQuizAnswer || "Toyota");
+document.getElementById('newQuizBtn').onclick = () => renderQuiz();
+soundBtn.onclick = activateSound;
+homeBtn.onclick = () => showScreen('home');
+
+updateStars();
+showScreen('home');
+</script>
+</body>
+</html>
